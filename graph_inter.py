@@ -22,8 +22,7 @@ from typing import Dict
 
 def main():
     
-     
-   
+       
          
         data_file = st.file_uploader("Suba el archivo",type=['xlsx'])
        
@@ -67,7 +66,7 @@ def main():
            st.write('la fecha final es', F2)  
            end = F2
       
-           
+        Texto_titulo = st.text_input("ingrese el titulo grafico:", "")  
         df_analisis = df[start:end]
         df_analisis[:]
        
@@ -91,14 +90,21 @@ def main():
         # filtro=df_analisis[df_filtro]
         # st.dataframe(df_analisis) 
         nombre_columna = df_analisis.columns.tolist()
-       
+        title=Texto_titulo +".html"
              
         seleccion=st.multiselect("seleeciones los campos", nombre_columna)
         selected =df_analisis[seleccion]
         
-        fig = px.line(selected, title ='Grafico: '+str(seleccion) )  
+        fig = px.line(selected, title ='Grafico: '+Texto_titulo+str(seleccion) )  
         #fig.show()
-        fig.write_html("presiones cali.html")
+        if st.button('Guardar gráfica en HTML'):
+        # Código para salvar la gráfica en HTML
+         fig.write_html(title)
+        # fig.write_html('grafica.html')
+         st.success('Gráfica guardada en HTML con éxito.')
+        
+        
+        
     
      
         
@@ -116,4 +122,8 @@ if __name__ == '__main__':
     
   
     
+    
+	
+    
+       
     
