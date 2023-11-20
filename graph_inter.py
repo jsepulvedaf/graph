@@ -18,11 +18,24 @@ from pandas import DataFrame
 from plotly.graph_objs import *
 import plotly.express as px
 from typing import Dict
+from pathlib import Path
+import pygwalker as pyg
+import streamlit.components.v1 as components
+
+class Parametro:
+    def __init__(self, dataframe):
+        self.dataframe = dataframe
+
+    def calcular_estadisticas(self):
+        # Calcular valores máximo, mínimo y promedio para cada variable
+        estadisticas = self.dataframe.describe().loc[['min', 'max', 'mean']]
+        return estadisticas
+
 
 
 def main():
     
-       
+        downloads_path = str(Path.home() / "Downloads")
          
         data_file = st.file_uploader("Suba el archivo",type=['xlsx'])
        
@@ -96,21 +109,34 @@ def main():
         selected =df_analisis[seleccion]
         
         fig = px.line(selected, title ='Grafico: '+Texto_titulo+str(seleccion) )  
-        #fig.show()
-        if st.button('Guardar gráfica en HTML'):
+        # fig.show()
+        # if st.button('Guardar gráfica en HTML'):
         # Código para salvar la gráfica en HTML
-         fig.write_html(title)
         # fig.write_html('grafica.html')
-         st.success('Gráfica guardada en HTML con éxito.')
+        # Llama a la función para generar la gráfica
+           
+       
+            
+
+        # Botón para guardar el archivo en el directorio de descargas del navegador
+                  
         
-        
-        
-    
-     
-        
-        
+       # Guarda el archivo en el directorio de descargas del navegador
+
+         
+       
         st.plotly_chart(fig, use_container_width=True)
-    
+        
+        ruta = str(downloads_path+"/"+ title)
+      
+        if st.button('guardar Hmtl'):
+
+          fig.write_html(ruta)
+        
+        parametro = Parametro(selected)
+        estadisticas = parametro.calcular_estadisticas()
+        st.text("Estadisticas Variables Selecionadas")
+        st.dataframe(estadisticas)
   
     
        
